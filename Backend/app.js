@@ -19,7 +19,8 @@ connectToDb();
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://uber-ryde-bymahesh.vercel.app"
+    "https://uber-ryde-bymahesh.vercel.app",
+    "https://uber-ryde.vercel.app"
   ],
   credentials: true
 }));
