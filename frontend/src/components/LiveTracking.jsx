@@ -2,10 +2,17 @@ import React, { useEffect, useRef, useState, useCallback } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
-// Use the token directly from environment
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
+// Debug: Check if token is available
+console.log('Mapbox Token:', import.meta.env.VITE_MAPBOX_ACCESS_TOKEN)
 
-mapboxgl.accessToken = MAPBOX_TOKEN
+// Use the token directly from environment
+const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || '';
+
+if (MAPBOX_TOKEN) {
+  mapboxgl.accessToken = MAPBOX_TOKEN;
+} else {
+  console.error('Mapbox access token is missing! Add VITE_MAPBOX_ACCESS_TOKEN to your .env file');
+}
 
 const LiveTracking = () => {
   const mapContainer = useRef(null)
@@ -20,6 +27,11 @@ const LiveTracking = () => {
 
   useEffect(() => {
     if (map.current) return // initialize map only once
+
+    if (!MAPBOX_TOKEN) {
+      setError('Mapbox access token is missing. Check console for details.')
+      return
+    }
 
     try {
       map.current = new mapboxgl.Map({

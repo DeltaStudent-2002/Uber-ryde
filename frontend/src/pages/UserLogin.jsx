@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { UserDataContext } from '../context/UserContext'
-import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { GoogleLogin } from '@react-oauth/google'
 
 const UserLogin = () => {
   const [ email, setEmail ] = useState('')
@@ -34,6 +34,23 @@ const UserLogin = () => {
 
     setEmail('')
     setPassword('')
+  }
+
+  const handleGoogleLogin = async (credentialResponse) => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/auth/google`, {
+        credential: credentialResponse.credential
+      })
+
+      if (response.status === 200) {
+        const data = response.data
+        setUser(data.user)
+        localStorage.setItem('token', data.token)
+        navigate('/home')
+      }
+    } catch (error) {
+      console.error('Google login error:', error)
+    }
   }
 
   return (
@@ -73,6 +90,27 @@ const UserLogin = () => {
           >Login</button>
 
         </form>
+
+        <div className='flex items-center justify-center my-4'>
+          <div className='w-full h-[1px] bg-gray-300'></div>
+          <span className='px-3 text-gray-500 text-sm'>or</span>
+          <div className='w-full h-[1px] bg-gray-300'></div>
+        </div>
+
+        <div className='flex justify-center mb-4'>
+          <GoogleLogin
+            onSuccess={handleGoogleLogin}
+            onError={() => {
+              console.log('Login Failed')
+            }}
+            useOneTap
+            theme="outline"
+            size="large"
+            text="signin_with"
+            shape="rectangular"
+          />
+        </div>
+
         <p className='text-center'>New here? <Link to='/signup' className='text-blue-600'>Create new Account</Link></p>
       </div>
       <div>
@@ -86,3 +124,4 @@ const UserLogin = () => {
 }
 
 export default UserLogin
+

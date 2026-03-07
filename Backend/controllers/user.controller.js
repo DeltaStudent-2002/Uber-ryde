@@ -2,6 +2,9 @@ const userModel = require('../models/user.model');
 const userService = require('../services/user.service');
 const { validationResult } = require('express-validator');
 const blacklistTokenModel = require('../models/blacklistToken.model');
+const { OAuth2Client } = require('google-auth-library');
+
+const client = new OAuth2Client("699930202211-gtl62qsbn9oia4f5efkebptmckbut3c3.apps.googleusercontent.com");
 
 module.exports.registerUser = async (req, res, next) => {
 
@@ -77,3 +80,31 @@ module.exports.logoutUser = async (req, res, next) => {
     res.status(200).json({ message: 'Logged out' });
 
 }
+
+module.exports.googleAuth = async (req, res, next) => {
+    const { credential } = req.body;
+
+    if (!credential) {
+        return res.status(400).json({ message: 'No credential provided' });
+    }
+
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: credential,
+            audience: "699930202211-gtl62qsbn9oia4f5efkebptmckbut3c3.apps.googleusercontent.com",
+        });
+
+        const payload = ticket.getPayload();
+        const { email, name, picture } = payload;
+
+        const user = await userService.createUserFromGoogle({ email, name, picture });
+
+        const token = user.generateAuthToken();
+
+        res.status(200).json({ token, user });
+    } catch (error) {
+        console.error('Google auth error:', error);
+        return res.status(401).json({ message: 'Invalid Google token' });
+    }
+}
+
