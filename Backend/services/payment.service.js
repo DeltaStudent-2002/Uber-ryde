@@ -1,7 +1,14 @@
 const Stripe = require('stripe');
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+
+const stripe = process.env.STRIPE_SECRET_KEY 
+    ? Stripe(process.env.STRIPE_SECRET_KEY) 
+    : null;
 
 module.exports.createPaymentIntent = async (amount, currency = 'inr') => {
+    if (!stripe) {
+        throw new Error('STRIPE_SECRET_KEY is not configured');
+    }
+    
     try {
         const paymentIntent = await stripe.paymentIntents.create({
             amount: amount * 100, // Convert to paise/cents

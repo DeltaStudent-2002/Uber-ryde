@@ -1,9 +1,13 @@
 const axios = require('axios');
 const captainModel = require('../models/captain.model');
 
-const MAPBOX_ACCESS_TOKEN = process.env.MAPBOX_ACCESS_TOKEN;
+const MAPBOX_ACCESS_TOKEN = process.env.MAPBOX_ACCESS_TOKEN || '';
 
 module.exports.getAddressCoordinate = async (address) => {
+    if (!MAPBOX_ACCESS_TOKEN) {
+        throw new Error('MAPBOX_ACCESS_TOKEN is not configured');
+    }
+    
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(address)}.json?access_token=${MAPBOX_ACCESS_TOKEN}&limit=1`;
 
     try {

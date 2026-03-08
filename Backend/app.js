@@ -1,5 +1,3 @@
-const dotenv = require('dotenv');
-dotenv.config();
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -19,7 +17,8 @@ connectToDb();
 app.use(cors({
   origin: [
     "http://localhost:5173",
-   "https://uber-ryde.vercel.app/"
+    "https://uber-ryde.vercel.app/",
+    "https://*.onrender.com"
   ],
   credentials: true
 }));
