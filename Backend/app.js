@@ -19,7 +19,7 @@ connectToDb();
 app.use(cors({
   origin: [
     "http://localhost:5173",
-   "https://uber-ryde-10wy7dxfm-deltastudent-2002s-projects.vercel.app/login"
+   "https://uber-ryde-10wy7dxfm-deltastudent-2002s-projects.vercel.app"
   ],
   credentials: true
 }));
