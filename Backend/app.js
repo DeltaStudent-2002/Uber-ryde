@@ -18,7 +18,7 @@ app.use(cors({
   origin: [
     "http://localhost:5173",
     "https://uber-ryde.vercel.app/",
-    "https://*.onrender.com"
+    "https://uber-clone-60p6.onrender.com/"
   ],
   credentials: true
 }));
