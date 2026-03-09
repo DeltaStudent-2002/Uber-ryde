@@ -15,7 +15,16 @@ const app = express();
 connectToDb();
 
 app.use(cors({
+<<<<<<< HEAD
   origin: true,
+=======
+  origin: [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "https://uber-ryde.vercel.app/",
+    "https://uber-clone-60p6.onrender.com"
+  ],
+>>>>>>> 721013ccfbbf4f290eca4f8e59624ce09b462923
   credentials: true
 }));
 
@@ -33,4 +42,3 @@ app.use('/maps', mapsRoutes);
 app.use('/rides', rideRoutes);
 app.use('/payments', paymentRoutes);
 
-module.exports = app;
