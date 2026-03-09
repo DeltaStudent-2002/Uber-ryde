@@ -15,11 +15,7 @@ const app = express();
 connectToDb();
 
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://uber-ryde.vercel.app/",
-    "https://uber-clone-60p6.onrender.com/"
-  ],
+  origin: true,
   credentials: true
 }));
 

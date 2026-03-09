@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import api from '../utils/axios'
 import { UserDataContext } from '../context/UserContext'
 import { GoogleLogin } from '@react-oauth/google'
 
@@ -31,7 +31,7 @@ const UserSignup = () => {
       password: password
     }
 
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`, newUser)
+    const response = await api.post('/users/register', newUser)
 
     if (response.status === 201) {
       const data = response.data
@@ -50,7 +50,7 @@ const UserSignup = () => {
 
   const handleGoogleLogin = async (credentialResponse) => {
     try {
-      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/auth/google`, {
+      const response = await api.post('/users/auth/google', {
         credential: credentialResponse.credential
       })
 
